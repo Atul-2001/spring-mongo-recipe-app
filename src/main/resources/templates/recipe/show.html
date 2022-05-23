@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}">
+
+    <link crossorigin="anonymous"
+          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/themes/smoothness/jquery-ui.css" rel="stylesheet"
+          th:href="@{/webjars/jquery-ui/1.13.1/jquery-ui.min.css}">
+
+    <link href="/static/assets/stylesheet/style.css" rel="stylesheet" th:href="@{/assets/stylesheet/style.css}">
+
+    <title>Recipe Info</title>
+</head>
+<body>
+
+<!--/*@thymesVar id="recipe" type="com.signature.recipe.model.Recipe"*/-->
+<!--/*@thymesVar id="category" type="com.signature.recipe.model.Category"*/-->
+<!--/*@thymesVar id="ingredient" type="com.signature.recipe.model.Ingredient"*/-->
+<!--/*@thymesVar id="unit" type="com.signature.recipe.model.UnitOfMeasure"*/-->
+<!--/*@thymesVar id="note" type="com.signature.recipe.model.Note"*/-->
+
+<div aria-hidden="true" aria-labelledby="fileUploadModal" class="modal fade" id="file-upload-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload a new recipe image</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <form enctype="multipart/form-data" method="post"
+                  th:action="@{'/recipe/' + ${recipe.getId()} + '/image'}">
+                <div class="modal-body">
+                    <label class="control-label">Select File : </label>
+                    <input class="file" id="image" name="file" type="file">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+                    <button class="btn btn-primary" type="submit">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="row">
+                <div class="col-6 text-start">
+                    <a class="back" th:href="@{'/'}">&#9204; Back</a>
+                </div>
+                <div class="col-6 text-end">
+                    <a class="edit" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">&#9998; Edit</a>
+                </div>
+            </div>
+            <div class="card card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <h6 class="col-8 card-title py-2 fs-4" th:text="${recipe.description}">Recipe Description
+                            Here!</h6>
+                        <div class="col-4 text-end">
+                            <a class="edit my-1" data-bs-target="#file-upload-modal" data-bs-toggle="modal"
+                               role="button">Change Image</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Categories:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <ul>
+                                <li th:remove="all">cat one</li>
+                                <li th:remove="all">cat two</li>
+                                <li th:each="category : ${recipe.categories}"
+                                    th:text="${category.description}">cat three
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <img alt="guacamole.jpg" height="200"
+                                 src="../../static/images/guacamole.jpg" th:src="${recipe.getBase64Image()}"
+                                 width="200">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Prep Time:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.prepTime} + ' min'">30 min</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Difficulty:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.difficulty}">Easy</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Cook time:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.cookTime} + ' min'">30 min</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Servings:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.servings}">4</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Source:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.source}">30 min</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label>URL:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <p><a th:href="${recipe.url}">View original</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-11">
+                            <label class="card-title mt-1">Ingredients</label>
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-1">
+                            <a class="btn btn-default text-white"
+                               role="button" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">View</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul>
+                                <li th:remove="all">1 Cup of milk</li>
+                                <li th:remove="all">1 Teaspoon of chocolate</li>
+                                <li th:each="ingredient : ${recipe.ingredients}"
+                                    th:text="${ingredient.getInfo()}">1 Teaspoon of Sugar
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h6 class="card-title">Directions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p th:text="${recipe.directions}">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                Aenean commodo ligula eget
+                                dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
+                                nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
+                                quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                                nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
+                                justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                                Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
+                                porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in,
+                                viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.
+                                Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur
+                                ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus
+                                eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed
+                                ipsum.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h6 class="card-title">Notes</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p th:text="${recipe.note.description}">Lorem ipsum dolor sit amet, consectetuer adipiscing
+                                elit. Aenean commodo ligula eget
+                                dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
+                                nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
+                                quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                                nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
+                                justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                                Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
+                                porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in,
+                                viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.
+                                Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur
+                                ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus
+                                eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed
+                                ipsum.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script crossorigin="anonymous"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+
+<script crossorigin="anonymous"
+        src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js"
+        th:src="@{/webjars/jquery-ui/1.13.1/jquery-ui.min.js}"></script>
+
+<script crossorigin="anonymous"
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+</body>
+</html>
