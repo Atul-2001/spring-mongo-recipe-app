@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -22,7 +23,7 @@ class UnitOfMeasureRepositoryTest {
 
   @BeforeEach
   void setUp() {
-    unitOfMeasureRepository.deleteAll();
+    unitOfMeasureRepository.save(new UnitOfMeasure(""));
     unitOfMeasureRepository.save(new UnitOfMeasure("Cup"));
     unitOfMeasureRepository.save(new UnitOfMeasure("Cups"));
     unitOfMeasureRepository.save(new UnitOfMeasure("Dash"));
@@ -38,7 +39,7 @@ class UnitOfMeasureRepositoryTest {
   }
 
   @Test
-//  @DirtiesContext
+  @DirtiesContext
   void findByDescription() {
     Optional<UnitOfMeasure> unitOfMeasure = unitOfMeasureRepository.findByDescription("Tablespoon");
 
@@ -48,7 +49,7 @@ class UnitOfMeasureRepositoryTest {
   }
 
   @Test
-//  @DirtiesContext
+  @DirtiesContext
   void findByDescription2() {
     Optional<UnitOfMeasure> unitOfMeasure = unitOfMeasureRepository.findByDescription("Medium");
 
