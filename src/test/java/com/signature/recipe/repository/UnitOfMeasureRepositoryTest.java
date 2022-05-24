@@ -13,15 +13,28 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ExtendWith(SpringExtension.class)
 @DataMongoTest
+@ExtendWith(SpringExtension.class)
 class UnitOfMeasureRepositoryTest {
 
   @Autowired
-  UnitOfMeasureRepository unitOfMeasureRepository;
+  public UnitOfMeasureRepository unitOfMeasureRepository;
 
   @BeforeEach
   void setUp() {
+    unitOfMeasureRepository.deleteAll();
+    unitOfMeasureRepository.save(new UnitOfMeasure("Cup"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Cups"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Dash"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Each"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Pint"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Ripe"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Small"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Ounce"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Pinch"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Medium"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Teaspoon"));
+    unitOfMeasureRepository.save(new UnitOfMeasure("Tablespoon"));
   }
 
   @Test

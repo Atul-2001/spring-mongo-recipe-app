@@ -25,13 +25,13 @@ import static org.mockito.Mockito.when;
 
 class IndexControllerTest {
 
-  IndexController controller;
+  public IndexController controller;
 
   @Mock
-  RecipeService service;
+  public RecipeService service;
 
   @Mock
-  Model model;
+  public Model model;
 
   @BeforeEach
   void setUp() {

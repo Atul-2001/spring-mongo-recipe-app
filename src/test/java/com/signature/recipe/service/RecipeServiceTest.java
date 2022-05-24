@@ -24,10 +24,10 @@ import static org.springframework.test.util.AssertionErrors.assertNotNull;
 
 class RecipeServiceTest {
 
-  RecipeService recipeService;
+  private RecipeService recipeService;
 
   @Mock
-  RecipeRepository recipeRepository;
+  public RecipeRepository recipeRepository;
 
   @BeforeEach
   void setUp() {
